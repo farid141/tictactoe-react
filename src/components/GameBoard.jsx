@@ -4,26 +4,29 @@ const initialGameBoard = [
     [null, null, null],
     [null, null, null],
 ]
-export default function GameBoard() {
+export default function GameBoard({onSelectSquare, activePlayer}) {
     const [gameBoard, setGameBoard] = useState(initialGameBoard);
-    const handleSelectSquare = (rowIndex, colIndex, symbol)=>{
+
+    const handleSelectSquare = (rowIndex, colIndex)=>{
         setGameBoard((prevGameBoard)=>{
             // kita harus mengcopy array/obj karena sifatnya mutable, akan memodifikasi original var
-            const gameBoard = [...prevGameBoard]
-            gameBoard[rowIndex][colIndex]=symbol
+            const gameBoard = [...prevGameBoard.map(innerArray=>[...innerArray])]
+            gameBoard[rowIndex][colIndex]=activePlayer
             return gameBoard
-        }
-    )}
+        })
+        onSelectSquare();
+    }
 
     return <ol id="game-board">
-        {initialGameBoard.map((row, rowIndex)=>(
+        {gameBoard.map((row, rowIndex)=>(
             <li key={rowIndex}>
                 <ol>
-                {row.map((playerSymbol, colIndex)=>(
+                {row.map((playerSymbol, colIndex)=>{
+                    return(
                     <li key={colIndex}>
-                        <button onClick={()=>handleSelectSquare(rowIndex, colIndex, 'x')}>{playerSymbol}</button>
+                        <button onClick={()=>handleSelectSquare(rowIndex, colIndex)}>{playerSymbol}</button>
                     </li>
-                ))}
+                )})}
                 </ol>
             </li>
         ))}
