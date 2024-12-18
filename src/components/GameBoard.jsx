@@ -4,18 +4,14 @@ const initialGameBoard = [
     [null, null, null],
     [null, null, null],
 ]
-export default function GameBoard({onSelectSquare, activePlayer}) {
-    const [gameBoard, setGameBoard] = useState(initialGameBoard);
+export default function GameBoard({onSelectSquare, turns}) {
+   const gameBoard = initialGameBoard;
+   for (const turn of turns) {
+    const {square, player} = turn
+    const {row, col} = square
 
-    const handleSelectSquare = (rowIndex, colIndex)=>{
-        setGameBoard((prevGameBoard)=>{
-            // kita harus mengcopy array/obj karena sifatnya mutable, akan memodifikasi original var
-            const gameBoard = [...prevGameBoard.map(innerArray=>[...innerArray])]
-            gameBoard[rowIndex][colIndex]=activePlayer
-            return gameBoard
-        })
-        onSelectSquare();
-    }
+    gameBoard[row][col] = player;
+   }
 
     return <ol id="game-board">
         {gameBoard.map((row, rowIndex)=>(
@@ -24,7 +20,7 @@ export default function GameBoard({onSelectSquare, activePlayer}) {
                 {row.map((playerSymbol, colIndex)=>{
                     return(
                     <li key={colIndex}>
-                        <button onClick={()=>handleSelectSquare(rowIndex, colIndex)}>{playerSymbol}</button>
+                        <button onClick={()=>onSelectSquare(rowIndex, colIndex)}>{playerSymbol}</button>
                     </li>
                 )})}
                 </ol>

@@ -3,9 +3,22 @@ import GameBoard from "./components/GameBoard";
 import { useState } from "react";
 
 function App() {
+  const [gameTurns, setGameTurns] = useState([]);
   const [activePlayer, setActivePlayer] = useState('x');
-  const handleSelectSquare = ()=>{
+
+  const handleSelectSquare = (rowIndex, colIndex)=>{
     setActivePlayer((currentPlayer)=>currentPlayer=='x'?'o':'x')
+    setGameTurns(prevTurns => {
+      let currentPlayer = 'x';
+      if(prevTurns.length > 0 && prevTurns[0].player == 'x')
+        currentPlayer = 'o'
+
+      const updatedTurns = [
+        {square: {row: rowIndex, col: colIndex}, player:currentPlayer}, 
+        ...prevTurns
+      ]
+      return updatedTurns;
+    })
   }
 
   return (
@@ -15,7 +28,7 @@ function App() {
           <Player name="player 1" activePlayer="x" isActive={activePlayer=='x'??false}/>
           <Player name="player 2" activePlayer="o" isActive={activePlayer=='o'??false}/>
         </ol>
-        <GameBoard onSelectSquare={handleSelectSquare} activePlayer={activePlayer}/>
+        <GameBoard onSelectSquare={handleSelectSquare} turns={gameTurns}/>
       </div>
     </main>
   )
