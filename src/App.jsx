@@ -67,7 +67,7 @@ function App() {
   const handleSelectSquare = (rowIndex, colIndex)=>{
     setGameTurns(prevTurns => {
       const updatedTurns = [
-        {square: {row: rowIndex, col: colIndex}, player:activePlayer}, 
+        {square: {row: rowIndex, col: colIndex}, player:activePlayer},  // masukkan langkah terakhir di index pertama
         ...prevTurns
       ]
       return updatedTurns;
